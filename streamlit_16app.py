@@ -68,7 +68,7 @@ shap.force_plot(
     matplotlib=True, 
     show=False
 )
-
+plt.xlim(min(importance_order), max(importance_order))
 # 保存高分辨率图片
 plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1200)  # 设置适当的 dpi 以提升分辨率
 st.image("shap_force_plot.png")
