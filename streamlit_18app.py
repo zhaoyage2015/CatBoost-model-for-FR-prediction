@@ -61,8 +61,11 @@ top_shap_values = full_shap_values[importance_order]  # 提取前8个特征的SH
 top_feature_values = [feature_values[i] for i in importance_order]  # 提取对应的特征值
 top_feature_names = [feature_names[i] for i in importance_order]  # 提取对应的特征名称
 
+# 设置字体大小和图像大小
+plt.rcParams.update({'font.size': 14})  # 增大字体，确保在图像中更加清晰
+plt.figure(figsize=(18, 5))  # 增大图像尺寸，使特征有足够的空间
+
 # 创建 SHAP force plot 并保存
-plt.figure(figsize=(18, 4))  # 增大图像尺寸
 shap.force_plot(
     expected_value, full_shap_values,  # 保留完整的 SHAP 计算，以保持真实输出值
     pd.DataFrame([feature_values], columns=feature_names), 
@@ -73,7 +76,9 @@ shap.force_plot(
 # 使用限制展示前8个特征
 plt.xlim(min(importance_order), max(importance_order))  # 仅展示前8个重要特征
 
-# 增加字体和更高 DPI
-plt.rcParams.update({'font.size': 12})  # 增大字体
-plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=400)  # 设置高 DPI 提升清晰度
-st.image("shap_force_plot.png")
+# 保存图像为高分辨率 PNG 文件
+file_name = "shap_force_plot.png"
+plt.savefig(file_name, bbox_inches='tight', dpi=1200)  # 设置高 DPI 提升清晰度
+
+# 直接加载并显示图像
+st.image(file_name)
