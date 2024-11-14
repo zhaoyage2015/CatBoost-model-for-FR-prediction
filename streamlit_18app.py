@@ -53,11 +53,9 @@ shap_values = explainer.shap_values(pd.DataFrame([feature_values], columns=featu
 
 # 增大图形尺寸并调整字体大小
 
-fig, ax = plt.subplots(figsize=(16, 4))
-shap.force_plot(explainer.expected_value, shap_values[0], 
-                pd.DataFrame([feature_values], columns=feature_names), 
-                matplotlib=True, show=False)
+shap_html = shap.force_plot(explainer.expected_value, shap_values[0], pd.DataFrame([feature_values], columns=feature_names), matplotlib=False)
+    html = f"<head>{shap.getjs()}</head><body>{shap_html.html()}</body>"
 
-# 显示和保存图像
-plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1200)
-plt.show()
+    # 在 Streamlit 中显示
+    st.components.v1.html(html, height=500, scrolling=True)
+
