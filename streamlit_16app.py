@@ -50,11 +50,20 @@ if st.button("Predict"):
 # SHAP 解释器
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(pd.DataFrame([feature_values], columns=feature_names))
+expected_value = explainer.expected_value
+full_shap_values = shap_values[0]
+
+# 选择前8个重要特征的 SHAP 值用于显示
+importance_order = np.argsort(-np.abs(full_shap_values))[:8]  # 获取前8个重要特征的索引
+top_shap_values = full_shap_values[importance_order]  # 提取前8个特征的SHAP值
+top_feature_values = [feature_values[i] for i in importance_order]  # 提取对应的特征值
+top_feature_names = [feature_names[i] for i in importance_order]  # 提取对应的特征名称
+
 
 # 增大图形尺寸并调整字体大小
 plt.figure(figsize=(18, 4))  # 增加图形宽度，以减少标签重叠
 shap.force_plot(
-    explainer.expected_value, shap_values[0], 
+    expected_value, full_shap_values,  # 保留完整的 SHAP 计算，以保持真实输出值
     pd.DataFrame([feature_values], columns=feature_names), 
     matplotlib=True, 
     show=False
