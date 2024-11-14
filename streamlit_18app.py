@@ -53,14 +53,14 @@ shap_values = explainer.shap_values(pd.DataFrame([feature_values], columns=featu
 
 # 增大图形尺寸并调整字体大小
 
-plt.figure(figsize=(10, 3))  # 增加图形宽度，以减少标签重叠
+plt.figure(figsize=(16, 4))  # 调整图像尺寸，使特征有足够的空间
 shap.force_plot(
-    explainer.expected_value, shap_values[0], 
-    pd.DataFrame([feature_values], columns=feature_names), 
+    explainer.expected_value, top_shap_values, 
+    pd.DataFrame([top_feature_values], columns=top_feature_names), 
     matplotlib=True, 
     show=False
 )
 
-# 保存高分辨率图片
-plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1200)  # 设置适当的 dpi 以提升分辨率
+# 增加字体和更高 DPI
+plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1200)  # 设置更高的 DPI 提升清晰度
 st.image("shap_force_plot.png")
