@@ -63,7 +63,7 @@ top_feature_names = [feature_names[i] for i in importance_order]  # 提取对应
 
 # 设置字体大小和图像大小
 plt.rcParams.update({'font.size': 14})  # 增大字体，确保在图像中更加清晰
-plt.figure(figsize=(18, 5))  # 增大图像尺寸，使特征有足够的空间
+plt.figure(figsize=(10, 3))  # 增大图像尺寸，使特征有足够的空间
 
 # 创建 SHAP force plot 并保存
 shap.force_plot(
@@ -78,7 +78,7 @@ plt.xlim(min(importance_order), max(importance_order))  # 仅展示前8个重要
 
 # 保存图像为高分辨率 PNG 文件
 file_name = "shap_force_plot.png"
-plt.savefig(file_name, bbox_inches='tight', dpi=1200)  # 设置高 DPI 提升清晰度
+plt.savefig(file_name, bbox_inches='tight', dpi=600)  # 设置高 DPI 提升清晰度
 
 # 直接加载并显示图像
 st.image(file_name)
