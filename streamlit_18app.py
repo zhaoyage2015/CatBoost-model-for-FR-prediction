@@ -48,11 +48,12 @@ if st.button("Predict"):
     st.write(result)
 
 # SHAP 解释器
-explainer = shap.TreeExplainer(model)
-shap_values = explainer.shap_values(pd.DataFrame([feature_values], columns=feature_names))
+importance_order = np.argsort(-np.abs(shap_values[0]))[:9]  # 获取前9个重要特征的索引
+top_shap_values = shap_values[0][importance_order]  # 提取前9个特征的SHAP值
+top_feature_values = [feature_values[i] for i in importance_order]  # 提取对应的特征值
+top_feature_names = [feature_names[i] for i in importance_order]  # 提取对应的特征名称
 
-# 增大图形尺寸并调整字体大小
-
+# 创建 SHAP force plot 并保存
 plt.figure(figsize=(16, 4))  # 调整图像尺寸，使特征有足够的空间
 shap.force_plot(
     explainer.expected_value, top_shap_values, 
@@ -62,5 +63,5 @@ shap.force_plot(
 )
 
 # 增加字体和更高 DPI
-plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1200)  # 设置更高的 DPI 提升清晰度
+plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)  # 设置更高的 DPI 提升清晰度
 st.image("shap_force_plot.png")
