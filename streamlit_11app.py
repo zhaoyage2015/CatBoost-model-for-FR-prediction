@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 model = joblib.load('CatBoost_model_11.pkl')
 st.title("RF Prediction")
 
-# 修正的 feature_names
+# 定义特征名称
 feature_names = ['NLR', 'Pulmonary infection', 'ASPECTS', 'Serum glucose', 'Hypertension',
                  'Hemorrhagic transformation_1', 'Initial NIHSS', 'Baseline DBP',
                  'Neutrophils', 'Age', 'MLS', 'AGR']
@@ -38,12 +38,25 @@ if st.button("Predict"):
     st.write(f"**Predicted Class:** {predicted_class}")
     st.write(f"**Prediction Probabilities:** {predicted_proba}")
     probability = predicted_proba[predicted_class] * 100
+    if predicted_class == 1:
+        result = f"According to feature values, predicted possibility of RF is: {probability}%"
+    else:
+        result = f"According to feature values, predicted possibility of RF is: {100 - probability}%"
+    st.write(result)
 
 # SHAP 解释器
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(pd.DataFrame([feature_values], columns=feature_names))
 
-# 显示 SHAP force plot
-shap.force_plot(explainer.expected_value, shap_values[0], pd.DataFrame([feature_values], columns=feature_names), matplotlib=True)
-plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1200)
+# 增加图的尺寸和调整字体大小
+plt.figure(figsize=(16, 6))  # 增大图形尺寸，使内容更清晰
+shap.force_plot(
+    explainer.expected_value, shap_values[0], 
+    pd.DataFrame([feature_values], columns=feature_names), 
+    matplotlib=True, 
+    show=False
+)
+
+# 设置图像保存参数
+plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1200)  # 设置更高的 dpi 以提升分辨率
 st.image("shap_force_plot.png")
