@@ -48,6 +48,8 @@ if st.button("Predict"):
     st.write(result)
 
 # SHAP 解释器
+explainer = shap.TreeExplainer(model)
+shap_values = explainer.shap_values(pd.DataFrame([feature_values], columns=feature_names))
 importance_order = np.argsort(-np.abs(shap_values[0]))[:9]  # 获取前9个重要特征的索引
 top_shap_values = shap_values[0][importance_order]  # 提取前9个特征的SHAP值
 top_feature_values = [feature_values[i] for i in importance_order]  # 提取对应的特征值
