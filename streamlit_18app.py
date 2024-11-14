@@ -50,13 +50,13 @@ if st.button("Predict"):
 # SHAP 解释器
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(pd.DataFrame([feature_values], columns=feature_names))
-importance_order = np.argsort(-np.abs(shap_values[0]))[:9]  # 获取前9个重要特征的索引
-top_shap_values = shap_values[0][importance_order]  # 提取前9个特征的SHAP值
+importance_order = np.argsort(-np.abs(shap_values[0]))[:8]  # 获取前8个重要特征的索引
+top_shap_values = shap_values[0][importance_order]  # 提取前8个特征的SHAP值
 top_feature_values = [feature_values[i] for i in importance_order]  # 提取对应的特征值
 top_feature_names = [feature_names[i] for i in importance_order]  # 提取对应的特征名称
 
 # 创建 SHAP force plot 并保存
-plt.figure(figsize=(16, 4))  # 调整图像尺寸，使特征有足够的空间
+plt.figure(figsize=(20, 6))  # 增大图像尺寸
 shap.force_plot(
     explainer.expected_value, top_shap_values, 
     pd.DataFrame([top_feature_values], columns=top_feature_names), 
@@ -64,6 +64,7 @@ shap.force_plot(
     show=False
 )
 
-# 增加字体和更高 DPI
-plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)  # 设置更高的 DPI 提升清晰度
+# 调整字体大小和增加 DPI
+plt.rcParams.update({'font.size': 12})  # 增大字体
+plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1200)  # 设置高 DPI 提升清晰度
 st.image("shap_force_plot.png")
