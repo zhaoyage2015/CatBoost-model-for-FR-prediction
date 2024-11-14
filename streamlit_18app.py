@@ -50,21 +50,30 @@ if st.button("Predict"):
 # SHAP 解释器
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(pd.DataFrame([feature_values], columns=feature_names))
-importance_order = np.argsort(-np.abs(shap_values[0]))[:8]  # 获取前8个重要特征的索引
-top_shap_values = shap_values[0][importance_order]  # 提取前8个特征的SHAP值
+
+# 获取所有特征的真实输出值（即完整的 SHAP 值和 expected value）
+expected_value = explainer.expected_value
+full_shap_values = shap_values[0]
+
+# 选择前8个重要特征的 SHAP 值用于显示
+importance_order = np.argsort(-np.abs(full_shap_values))[:8]  # 获取前8个重要特征的索引
+top_shap_values = full_shap_values[importance_order]  # 提取前8个特征的SHAP值
 top_feature_values = [feature_values[i] for i in importance_order]  # 提取对应的特征值
 top_feature_names = [feature_names[i] for i in importance_order]  # 提取对应的特征名称
 
 # 创建 SHAP force plot 并保存
-plt.figure(figsize=(20, 6))  # 增大图像尺寸
+plt.figure(figsize=(18, 4))  # 增大图像尺寸
 shap.force_plot(
-    explainer.expected_value, top_shap_values, 
-    pd.DataFrame([top_feature_values], columns=top_feature_names), 
+    expected_value, full_shap_values,  # 保留完整的 SHAP 计算，以保持真实输出值
+    pd.DataFrame([feature_values], columns=feature_names), 
     matplotlib=True, 
     show=False
 )
 
-# 调整字体大小和增加 DPI
+# 使用限制展示前8个特征
+plt.xlim(min(importance_order), max(importance_order))  # 仅展示前8个重要特征
+
+# 增加字体和更高 DPI
 plt.rcParams.update({'font.size': 12})  # 增大字体
-plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1200)  # 设置高 DPI 提升清晰度
+plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=400)  # 设置高 DPI 提升清晰度
 st.image("shap_force_plot.png")
