@@ -83,10 +83,10 @@ shap_values = explainer.shap_values(features)
 # 增大图形尺寸，解决特征重叠问题
 plt.figure(figsize=(20, 10))
 shap.force_plot(
-    explainer.expected_value,
-    shap_values[0],
-    features.iloc[0, :],  # 使用 DataFrame 的单行，确保顺序对应
-    feature_names=features.columns,  # 使用原始特征名与顺序一致
+    base_value=explainer.expected_value,
+    shap_values=shap_values[0],
+    features=features.iloc[0, :],  # 使用 DataFrame 的单行，特征顺序不变
+    feature_names=features.columns,  # 原始特征名
     matplotlib=True,
     show=False
 )
