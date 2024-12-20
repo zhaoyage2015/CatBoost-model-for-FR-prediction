@@ -35,6 +35,7 @@ feature_name_mapping = {
     'MLS': 'MLS',
     'AGR': 'AGR'
 }
+
 # 输入控件
 NLR = st.number_input(f"{feature_name_mapping['NLR']}:", min_value=1.00, max_value=100.00, value=10.00)
 PI = st.selectbox(f"{feature_name_mapping['Pulmonary infection']} (0=NO, 1=Yes):", options=[0, 1], format_func=lambda x: 'NO (0)' if x == 0 else 'Yes (1)')
@@ -49,12 +50,14 @@ NE = st.number_input(f"{feature_name_mapping['Neutrophils']}:", min_value=1.50, 
 CRP = st.number_input(f"{feature_name_mapping['AGR']}:", min_value=0.10, max_value=200.00, value=12.50)
 Age = st.number_input(f"{feature_name_mapping['Age']}:", min_value=18, max_value=100, value=66)
 
-
 # 特征值列表
 feature_values = [NLR, PI, ASPECTS, GLU, HTN, Symptomatic_HT, NIHSS, MLS, DBP, NE, CRP, Age]
 
 # 转换为模型特征
 features = pd.DataFrame([feature_values], columns=list(feature_name_mapping.keys()))
+
+# 特征值列表
+
 # 预测按钮
 if st.button("Predict"):
     predicted_class = model.predict(features)[0]
@@ -75,23 +78,33 @@ explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(features)
 
 # 增大图形尺寸，解决特征重叠问题
-features = features[[name for name in feature_name_mapping.keys()]]
-aligned_shap_values = shap_values[:, [list(features.columns).index(col) for col in feature_name_mapping.keys()]]
-
-# 绘制 SHAP Force Plot
 plt.figure(figsize=(20, 10))
+
+# 生成 SHAP Force Plot
 shap.force_plot(
-    base_value=explainer.expected_value,
-    shap_values=aligned_shap_values[0],  # 使用对齐的 SHAP 值
-    features=features.iloc[0, :],  # 使用对齐的特征
-    feature_names=list(feature_name_mapping.values()),  # 使用用户友好的特征名
+    explainer.expected_value,
+    shap_values[0],
+    features.iloc[0, :],
     matplotlib=True,
     show=False
 )
 
-# 保存图片
-plt.savefig("shap_force_plot_fixed.png", bbox_inches='tight', dpi=600)
-st.image("shap_force_plot_fixed.png", caption="SHAP Force Plot (Corrected)")
+# 获取当前图形中的文本元素
+ax = plt.gca()
+texts = [t for t in ax.texts]  # 提取所有标签文本
+
+# 分别调整 Hypertension 和 Pulmonary infection 的位置
+for text in texts:
+    if "Hypertension" in text.get_text():
+        current_pos = text.get_position()
+        text.set_position((current_pos[0] - 0.5, current_pos[1]))  # Hypertension 左移 6mm
+    if "Pulmonary infection" in text.get_text():
+        current_pos = text.get_position()
+        text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Pulmonary infection 左移 6mm
+
+# 保存高分辨率图片
+plt.savefig("shap_force_plot_optimized_final.png", bbox_inches='tight', dpi=600)  # 进一步提高分辨率
+st.image("shap_force_plot_optimized_final.png", caption="SHAP Force Plot (Further Optimized)")
 
 # 添加 SHAP Summary Plot 作为替代选项
 st.subheader("SHAP Summary Plot")
