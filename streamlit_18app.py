@@ -75,30 +75,23 @@ explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(features)
 
 # 增大图形尺寸，解决特征重叠问题
+features = features[[name for name in feature_name_mapping.keys()]]
+aligned_shap_values = shap_values[:, [list(features.columns).index(col) for col in feature_name_mapping.keys()]]
+
+# 绘制 SHAP Force Plot
 plt.figure(figsize=(20, 10))
 shap.force_plot(
     base_value=explainer.expected_value,
-    shap_values=shap_values[0],
-    features=features.iloc[0, :],  # 确保特征值正确映射
-    feature_names=list(feature_name_mapping.values()),  # 显示映射后的特征名
+    shap_values=aligned_shap_values[0],  # 使用对齐的 SHAP 值
+    features=features.iloc[0, :],  # 使用对齐的特征
+    feature_names=list(feature_name_mapping.values()),  # 使用用户友好的特征名
     matplotlib=True,
     show=False
 )
 
-# 调整标签位置
-ax = plt.gca()
-texts = [t for t in ax.texts]  # 提取所有标签文本
-for text in texts:
-    if "Hypertension" in text.get_text():
-        current_pos = text.get_position()
-        text.set_position((current_pos[0] - 0.5, current_pos[1]))  # 左移
-    if "Pulmonary infection" in text.get_text():
-        current_pos = text.get_position()
-        text.set_position((current_pos[0] - 0.4, current_pos[1]))  # 左移
-
-# 保存修正后的图片
-plt.savefig("shap_force_plot_corrected.png", bbox_inches='tight', dpi=600)
-st.image("shap_force_plot_corrected.png", caption="SHAP Force Plot (Corrected)")
+# 保存图片
+plt.savefig("shap_force_plot_fixed.png", bbox_inches='tight', dpi=600)
+st.image("shap_force_plot_fixed.png", caption="SHAP Force Plot (Corrected)")
 
 # 添加 SHAP Summary Plot 作为替代选项
 st.subheader("SHAP Summary Plot")
