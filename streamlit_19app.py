@@ -50,19 +50,29 @@ explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(features)
 
 # 增大图形尺寸，解决特征重叠问题
-plt.figure(figsize=(24, 10))  # 增大宽度为20，高度为10
+plt.figure(figsize=(20, 10))
+
+# 生成 SHAP Force Plot
 shap.force_plot(
-    explainer.expected_value, 
-    shap_values[0], 
-    features.iloc[0, :],  # 确保特征名称与值匹配
-    matplotlib=True, 
+    explainer.expected_value,
+    shap_values[0],
+    features.iloc[0, :],
+    matplotlib=True,
     show=False
 )
 
-# 使用 Matplotlib 调整标签字体大小
-plt.xticks(fontsize=12)  # 调整x轴标签字体大小
-plt.yticks(fontsize=12)  # 调整y轴标签字体大小
-plt.text(x, y, "Pulmonary infection", fontsize=12)
+# 获取当前图形中的文本元素
+ax = plt.gca()
+texts = [t for t in ax.texts]  # 提取所有标签文本
+
+# 分别调整 Hypertension 和 Pulmonary infection 的位置
+for text in texts:
+    if "Hypertension" in text.get_text():
+        current_pos = text.get_position()
+        text.set_position((current_pos[0] - 0.6, current_pos[1]))  # Hypertension 左移 6mm
+    if "Pulmonary infection" in text.get_text():
+        current_pos = text.get_position()
+        text.set_position((current_pos[0] - 0.6, current_pos[1]))  # Pulmonary infection 左移 6mm
 
 # 保存高分辨率图片
 plt.savefig("shap_force_plot_optimized_final.png", bbox_inches='tight', dpi=600)  # 进一步提高分辨率
