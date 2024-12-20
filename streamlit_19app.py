@@ -50,7 +50,7 @@ explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(features)
 
 # 增大图形尺寸，解决特征重叠问题
-plt.figure(figsize=(22, 8))  # 增大宽度为20，高度为10
+plt.figure(figsize=(24, 10))  # 增大宽度为20，高度为10
 shap.force_plot(
     explainer.expected_value, 
     shap_values[0], 
@@ -60,8 +60,9 @@ shap.force_plot(
 )
 
 # 使用 Matplotlib 调整标签字体大小
-plt.xticks(fontsize=10)  # 调整x轴标签字体大小
+plt.xticks(fontsize=12)  # 调整x轴标签字体大小
 plt.yticks(fontsize=12)  # 调整y轴标签字体大小
+plt.text(x, y, "Pulmonary infection", fontsize=12)
 
 # 保存高分辨率图片
 plt.savefig("shap_force_plot_optimized_final.png", bbox_inches='tight', dpi=600)  # 进一步提高分辨率
