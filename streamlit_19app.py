@@ -70,5 +70,5 @@ st.subheader("SHAP Summary Plot")
 plt.figure(figsize=(10, 6))  # 设置适合论文使用的尺寸
 shap.summary_plot(shap_values, features, show=False)
 plt.tight_layout()
-plt.savefig("shap_summary_plot.png", dpi=300)  # 保存为高分辨率图片
+plt.savefig("shap_summary_plot.png", dpi=600)  # 保存为高分辨率图片
 st.image("shap_summary_plot.png", caption="SHAP Summary Plot")
