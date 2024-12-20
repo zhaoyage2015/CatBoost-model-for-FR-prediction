@@ -93,6 +93,19 @@ shap.force_plot(
     matplotlib=True,
     show=False
 )
+# 获取当前图形中的文本元素
+ax = plt.gca()
+texts = [t for t in ax.texts]  # 提取所有标签文本
+
+# 分别调整 Hypertension 和 Pulmonary infection 的位置
+for text in texts:
+    if "Hypertension" in text.get_text():
+        current_pos = text.get_position()
+        text.set_position((current_pos[0] - 0.5, current_pos[1]))  # Hypertension 左移 6mm
+    if "Pulmonary infection" in text.get_text():
+        current_pos = text.get_position()
+        text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Pulmonary infection 左移 6mm
+
 
 # 保存高分辨率图片
 plt.savefig("shap_force_plot_final.png", bbox_inches='tight', dpi=600)
