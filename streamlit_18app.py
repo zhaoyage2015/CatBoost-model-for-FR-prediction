@@ -76,32 +76,29 @@ shap_values = explainer.shap_values(features)
 
 # 增大图形尺寸，解决特征重叠问题
 plt.figure(figsize=(20, 10))
-
-# 生成 SHAP Force Plot
 shap.force_plot(
-    explainer.expected_value,
-    shap_values[0],
-    features.iloc[0, :],
+    base_value=explainer.expected_value,
+    shap_values=shap_values[0],
+    features=features.iloc[0, :],  # 确保特征值正确映射
+    feature_names=list(feature_name_mapping.values()),  # 显示映射后的特征名
     matplotlib=True,
     show=False
 )
 
-# 获取当前图形中的文本元素
+# 调整标签位置
 ax = plt.gca()
 texts = [t for t in ax.texts]  # 提取所有标签文本
-
-# 分别调整 Hypertension 和 Pulmonary infection 的位置
 for text in texts:
     if "Hypertension" in text.get_text():
         current_pos = text.get_position()
-        text.set_position((current_pos[0] - 0.5, current_pos[1]))  # Hypertension 左移 6mm
+        text.set_position((current_pos[0] - 0.5, current_pos[1]))  # 左移
     if "Pulmonary infection" in text.get_text():
         current_pos = text.get_position()
-        text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Pulmonary infection 左移 6mm
+        text.set_position((current_pos[0] - 0.4, current_pos[1]))  # 左移
 
-# 保存高分辨率图片
-plt.savefig("shap_force_plot_optimized_final.png", bbox_inches='tight', dpi=600)  # 进一步提高分辨率
-st.image("shap_force_plot_optimized_final.png", caption="SHAP Force Plot (Further Optimized)")
+# 保存修正后的图片
+plt.savefig("shap_force_plot_corrected.png", bbox_inches='tight', dpi=600)
+st.image("shap_force_plot_corrected.png", caption="SHAP Force Plot (Corrected)")
 
 # 添加 SHAP Summary Plot 作为替代选项
 st.subheader("SHAP Summary Plot")
