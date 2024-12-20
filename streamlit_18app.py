@@ -19,7 +19,7 @@ st.markdown("""
         margin-top: 0rem !important;    /* 强制去掉控件顶部间距 */
     }
     </style>
-    """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True) 
 # 定义特征名称
 feature_name_mapping = {
     'NLR': 'NLR',
@@ -54,7 +54,9 @@ Age = st.number_input(f"{feature_name_mapping['Age']}:", min_value=18, max_value
 feature_values = [NLR, PI, ASPECTS, GLU, HTN, Symptomatic_HT, NIHSS, MLS, DBP, NE, CRP, Age]
 
 # 转换为模型特征
-features = pd.DataFrame([feature_values], columns=list(feature_name_mapping.keys()))
+
+
+features = features[[name for name in feature_name_mapping.keys()]]
 
 # 特征值列表
 
