@@ -52,18 +52,22 @@ explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(features)
 
 # 增大图形尺寸，解决特征重叠问题
-plt.figure(figsize=(18, 10))  # 增大图宽度和高度
+plt.figure(figsize=(20, 10))  # 增大宽度为20，高度为10
 shap.force_plot(
     explainer.expected_value, 
     shap_values[0], 
-    features.iloc[0, :],  # 使用 DataFrame 的单行，确保特征名称与值匹配
+    features.iloc[0, :],  # 确保特征名称与值匹配
     matplotlib=True, 
     show=False
 )
 
+# 使用 Matplotlib 调整标签字体大小
+plt.xticks(fontsize=12)  # 调整x轴标签字体大小
+plt.yticks(fontsize=12)  # 调整y轴标签字体大小
+
 # 保存高分辨率图片
-plt.savefig("shap_force_plot_optimized.png", bbox_inches='tight', dpi=600)  # 优化 DPI
-st.image("shap_force_plot_optimized.png", caption="SHAP Force Plot (Optimized)")
+plt.savefig("shap_force_plot_optimized_final.png", bbox_inches='tight', dpi=400)  # 进一步提高分辨率
+st.image("shap_force_plot_optimized_final.png", caption="SHAP Force Plot (Further Optimized)")
 
 # 添加 SHAP Summary Plot 作为替代选项
 st.subheader("SHAP Summary Plot")
