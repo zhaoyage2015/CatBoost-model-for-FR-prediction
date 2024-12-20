@@ -8,6 +8,13 @@ import matplotlib.pyplot as plt
 # 加载模型
 model = joblib.load('CatBoost_model_11.pkl')
 st.markdown("<h3 style='text-align: center; color: black;'>FR Prediction</h3>", unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    div.stNumberInput, div.stSelectbox, div.stTextInput, div.stSlider {
+        margin-bottom: 0.5rem; /* 调整底部间距为0.5rem */
+    }
+    </style>
+    """, unsafe_allow_html=True)
 # 定义特征名称
 feature_names = ['NLR', 'Pulmonary infection', 'ASPECTS', 'Serum glucose', 'Hypertension',
                  'Hemorrhagic transformation_1', 'Initial NIHSS', 'Baseline DBP',
