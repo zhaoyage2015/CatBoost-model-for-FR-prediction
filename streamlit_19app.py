@@ -69,10 +69,10 @@ texts = [t for t in ax.texts]  # 提取所有标签文本
 for text in texts:
     if "Hypertension" in text.get_text():
         current_pos = text.get_position()
-        text.set_position((current_pos[0] - 0.6, current_pos[1]))  # Hypertension 左移 6mm
+        text.set_position((current_pos[0] - 0.5, current_pos[1]))  # Hypertension 左移 6mm
     if "Pulmonary infection" in text.get_text():
         current_pos = text.get_position()
-        text.set_position((current_pos[0] - 0.6, current_pos[1]))  # Pulmonary infection 左移 6mm
+        text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Pulmonary infection 左移 6mm
 
 # 保存高分辨率图片
 plt.savefig("shap_force_plot_optimized_final.png", bbox_inches='tight', dpi=600)  # 进一步提高分辨率
