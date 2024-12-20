@@ -7,12 +7,16 @@ import matplotlib.pyplot as plt
 
 # 加载模型
 model = joblib.load('CatBoost_model_11.pkl')
-st.markdown("<h5 style='text-align: center; color: black;'>FR Prediction</h5>", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: center; color: black;'>FR Prediction</h6>", unsafe_allow_html=True)
 st.markdown("""
     <style>
+    /* 覆盖 Streamlit 默认控件的上下间距 */
+    div[data-testid="stVerticalBlock"] {
+        gap: 0rem !important; /* 去除垂直块之间的间距 */
+    }
     div.stNumberInput, div.stSelectbox, div.stTextInput, div.stSlider {
-        margin-bottom: 0rem !important; /* 强制去掉底部间距 */
-        margin-top: 0rem !important;    /* 强制去掉顶部间距 */
+        margin-bottom: 0rem !important; /* 强制去掉控件底部间距 */
+        margin-top: 0rem !important;    /* 强制去掉控件顶部间距 */
     }
     </style>
     """, unsafe_allow_html=True)
