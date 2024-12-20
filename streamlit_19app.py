@@ -7,11 +7,11 @@ import matplotlib.pyplot as plt
 
 # 加载模型
 model = joblib.load('CatBoost_model_11.pkl')
-st.markdown("<h3 style='text-align: center; color: black;'>FR Prediction</h3>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: black;'>FR Prediction</h2>", unsafe_allow_html=True)
 st.markdown("""
     <style>
     div.stNumberInput, div.stSelectbox, div.stTextInput, div.stSlider {
-        margin-bottom: 0.5rem; /* 调整底部间距为0.5rem */
+        margin-bottom: 0.2rem; /* 调整底部间距为0.2rem */
     }
     </style>
     """, unsafe_allow_html=True)
