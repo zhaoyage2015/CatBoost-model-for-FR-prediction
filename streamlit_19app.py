@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 # 加载模型
 model = joblib.load('CatBoost_model_11.pkl')
+st.title("FR Prediction")
 # 定义特征名称
 feature_names = ['NLR', 'Pulmonary infection', 'ASPECTS', 'Serum glucose', 'Hypertension',
                  'Hemorrhagic transformation_1', 'Initial NIHSS', 'Baseline DBP',
