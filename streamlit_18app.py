@@ -74,7 +74,7 @@ if st.button("Predict"):
     st.write(f"**Predicted Class:** {predicted_class}")
     st.write(f"**Prediction Probabilities:** {[round(p * 100, 2) for p in predicted_proba]}")
 
-    result = f"According to feature values, predicted possibility of RF is: {probability}%" \
+    result = f"According to feature values, predicted possibility of FR is: {probability}%" \
         if predicted_class == 1 else \
         f"According to feature values, predicted possibility of RF is: {100 - probability}%"
     st.write(result)
