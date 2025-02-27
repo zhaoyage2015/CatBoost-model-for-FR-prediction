@@ -79,20 +79,48 @@ if st.button("Predict"):
     st.write(result)
 
 # SHAP Force Plot generation
+# SHAP Force Plot generation
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(features)
 
-# Generate SHAP force plot
-plt.figure(figsize=(20, 10))
+plt.figure(figsize=(22, 8))  # 加宽画布水平空间
+ax = plt.gca()
+
+# 生成基础force plot
 shap.force_plot(
     base_value=explainer.expected_value,
     shap_values=shap_values[0],
-    features=features.iloc[0, :],  # Ensure correct mapping of features
+    features=features.iloc[0, :],
     feature_names=model_features,
     matplotlib=True,
-    show=False
+    show=False,
+    text_rotation=15,  # 添加标签旋转
+    plot_cmap="coolwarm"  # 调整颜色增强可读性
 )
 
-# Save high-resolution image
-plt.savefig("shap_force_plot_final.png", bbox_inches='tight', dpi=600)
-st.image("shap_force_plot_final.png", caption="SHAP Force Plot (Corrected)")
+# 手动调整标签布局
+def adjust_shap_labels(ax, x_offset=0.05):
+    """调整SHAP标签位置防止重叠"""
+    texts = [t for t in ax.texts if t.get_text() in model_features]
+    
+    # 计算初始位置
+    y_positions = np.linspace(0.1, 0.9, len(texts))
+    
+    for i, text in enumerate(texts):
+        # 设置垂直对齐和旋转
+        text.set_rotation(12)  # 轻微旋转
+        text.set_ha('right')   # 水平对齐方式
+        text.set_va('center')  # 垂直对齐
+        
+        # 动态水平偏移
+        current_x = text.get_position()[0]
+        text.set_position((current_x - (i%3)*x_offset, y_positions[i]))
+
+adjust_shap_labels(ax, x_offset=0.08)
+
+# 优化保存参数
+plt.savefig("shap_force_plot_final.png", 
+           bbox_inches='tight', 
+           dpi=300, 
+           pad_inches=0.2)  # 增加边距
+st.image("shap_force_plot_final.png", caption="SHAP Force Plot (Optimized Layout)")
