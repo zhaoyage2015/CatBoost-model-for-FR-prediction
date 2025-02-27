@@ -32,10 +32,10 @@ feature_name_mapping = {
     'Hemorrhagic transformation_1': 'Symptomatic HT',  # 替换名称（用户界面用）
     'Initial NIHSS': 'Initial NIHSS',
     'Neutrophils': 'Neutrophils',
-    'CRP': 'CRP'
+    'CRP': 'CRP',
     'Baseline DBP': 'Baseline DBP',
     'MLS': 'MLS',
-    'Age': 'Age',   
+    'Age': 'Age'  
 }
 
 # 用户输入控件
