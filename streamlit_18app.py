@@ -52,7 +52,7 @@ NIHSS = st.number_input(f"{feature_name_mapping['Initial NIHSS']}:", min_value=3
 MLS = st.number_input(f"{feature_name_mapping['MLS']}:", min_value=0.00, max_value=30.00, value=2.88)
 DBP = st.number_input(f"{feature_name_mapping['Baseline DBP']}:", min_value=40, max_value=160, value=85)
 NE = st.number_input(f"{feature_name_mapping['Neutrophils']}:", min_value=1.50, max_value=30.00, value=8.00)
-CRP = st.number_input(f"{feature_name_mapping['AGR']}:", min_value=0.10, max_value=200.00, value=12.50)
+CRP = st.number_input(f"{feature_name_mapping['CRP']}:", min_value=0.10, max_value=200.00, value=12.50)
 Age = st.number_input(f"{feature_name_mapping['Age']}:", min_value=18, max_value=100, value=66)
 
 # 特征值列表（顺序与模型训练时保持一致！）
