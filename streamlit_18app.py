@@ -121,6 +121,6 @@ adjust_shap_labels(ax, x_offset=0.08)
 # 优化保存参数
 plt.savefig("shap_force_plot_final.png", 
            bbox_inches='tight', 
-           dpi=300, 
+           dpi=600, 
            pad_inches=0.2)  # 增加边距
 st.image("shap_force_plot_final.png", caption="SHAP Force Plot (Optimized Layout)")
