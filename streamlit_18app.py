@@ -104,8 +104,8 @@ for text in texts:
 
 # Reduce font size for labels to avoid overlap
 for text in texts:
-    text.set_fontsize(8)  # Decrease font size
+    text.set_fontsize(9)  # Decrease font size
 
 # Save high-resolution image
-plt.savefig("shap_force_plot_final.png", bbox_inches='tight', dpi=1200)
+plt.savefig("shap_force_plot_final.png", bbox_inches='tight', dpi=1500)
 st.image("shap_force_plot_final.png", caption="SHAP Force Plot (Corrected)")
