@@ -24,18 +24,18 @@ st.markdown("""
 
 # 定义用户输入的特征名和模型实际特征名的映射
 feature_name_mapping = {
-    'NLR': 'NLR',
     'Pulmonary infection': 'Pulmonary infection',
+    'NLR': 'NLR',
     'ASPECTS': 'ASPECTS',
-    'Serum glucose': 'Serum glucose',
     'Hypertension': 'Hypertension',
+    'Serum glucose': 'Serum glucose',
     'Hemorrhagic transformation_1': 'Symptomatic HT',  # 替换名称（用户界面用）
     'Initial NIHSS': 'Initial NIHSS',
-    'Baseline DBP': 'Baseline DBP',
     'Neutrophils': 'Neutrophils',
-    'Age': 'Age',
-    'MLS': 'MLS',
     'CRP': 'CRP'
+    'Baseline DBP': 'Baseline DBP',
+    'MLS': 'MLS',
+    'Age': 'Age',   
 }
 
 # 用户输入控件
@@ -56,12 +56,12 @@ MLS = st.number_input(f"{feature_name_mapping['MLS']}:", min_value=0.00, max_val
 Age = st.number_input(f"{feature_name_mapping['Age']}:", min_value=18, max_value=100, value=66)
 
 # 特征值列表（顺序与模型训练时保持一致！）
-feature_values = [NLR, PI, ASPECTS, GLU, HTN, Symptomatic_HT, NIHSS, DBP, NE, Age, MLS, CRP]
+feature_values = [PI, NLR, ASPECTS, HTN, GLU, Symptomatic_HT, NIHSS, NE, CRP, DBP, MLS, Age]
 # 特征映射回模型训练时的原始特征名
 model_features = [
-    'NLR', 'Pulmonary infection', 'ASPECTS', 'Serum glucose', 'Hypertension',
-    'Hemorrhagic transformation_1', 'Initial NIHSS', 'Baseline DBP',
-    'Neutrophils', 'Age', 'MLS', 'CRP'
+    'Pulmonary infection' 'NLR' 'ASPECTS' 'Hypertension' 'Serum glucose'
+ 'Hemorrhage transformation_1' 'Initial NIHSS' 'Neutrophils' 'CRP'
+ 'Baseline DBP' 'MLS' 'Age'
 ]
 features = pd.DataFrame([feature_values], columns=model_features)
 
