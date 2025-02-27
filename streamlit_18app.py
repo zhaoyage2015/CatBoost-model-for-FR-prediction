@@ -45,7 +45,7 @@ HTN = st.selectbox(f"{feature_name_mapping['Hypertension']} (0=NO, 1=Yes):", opt
 GLU = st.number_input(f"{feature_name_mapping['Serum glucose']}:", min_value=2.2, max_value=32.0, value=8.0)
 Symptomatic_HT = st.selectbox(f"{feature_name_mapping['Hemorrhage transformation_1']} (0=NO, 1=Yes):", options=[0, 1], format_func=lambda x: 'NO (0)' if x == 0 else 'Yes (1)')
 NIHSS = st.number_input(f"{feature_name_mapping['Initial NIHSS']}:", min_value=3, max_value=42, value=17)
-NE = st.number_input(f"{feature_name_mapping['Neutrophils']}:", min_value=1.50, max_value=30.00, value=8.00)
+NE = st.number_input(f"{feature_name_mapping['Neutrophils']}:", min_value=1.50, max_value=30.00, value=9.00)
 CRP = st.number_input(f"{feature_name_mapping['CRP']}:", min_value=0.10, max_value=200.00, value=12.50)
 DBP = st.number_input(f"{feature_name_mapping['Baseline DBP']}:", min_value=40, max_value=160, value=85)
 MLS = st.number_input(f"{feature_name_mapping['MLS']}:", min_value=0.00, max_value=30.00, value=2.88)
@@ -77,7 +77,9 @@ if st.button("Predict"):
         if predicted_class == 1 else \
         f"According to feature values, predicted possibility of FR is: {100 - probability}%"
     st.write(result)
-
+# SHAP Force Plot generation
+explainer = shap.TreeExplainer(model)
+shap_values = explainer.shap_values(features)
 # SHAP Force Plot generation
 plt.figure(figsize=(20, 10))
 shap.force_plot(
