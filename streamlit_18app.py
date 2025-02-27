@@ -83,7 +83,7 @@ explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(features)
 
 # Generate SHAP force plot
-plt.figure(figsize=(20, 10))
+plt.figure(figsize=(24, 12))
 shap.force_plot(
     base_value=explainer.expected_value,
     shap_values=shap_values[0],
@@ -100,12 +100,12 @@ texts = [t for t in ax.texts]  # Extract text elements
 # Move feature labels horizontally to avoid overlap
 for text in texts:
     current_pos = text.get_position()
-    text.set_position((current_pos[0] - 0.3, current_pos[1]))  # Shift position horizontally
+    text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Shift position horizontally
 
 # Reduce font size for labels to avoid overlap
 for text in texts:
-    text.set_fontsize(10)  # Decrease font size
+    text.set_fontsize(12)  # Decrease font size
 
 # Save high-resolution image
-plt.savefig("shap_force_plot_final.png", bbox_inches='tight', dpi=800)
+plt.savefig("shap_force_plot_final.png", bbox_inches='tight', dpi=1200)
 st.image("shap_force_plot_final.png", caption="SHAP Force Plot (Corrected)")
