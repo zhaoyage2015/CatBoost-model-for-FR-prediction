@@ -28,7 +28,7 @@ feature_name_mapping = {
     'ASPECTS': 'ASPECTS',
     'Hypertension': 'Hypertension',
     'Serum glucose': 'Serum glucose',
-    'Hemorrhagic transformation_1': 'Symptomatic HT',
+    'Hemorrhage transformation_1': 'Symptomatic HT',
     'Initial NIHSS': 'Initial NIHSS',
     'Neutrophils': 'Neutrophils',
     'CRP': 'CRP',
@@ -43,7 +43,7 @@ NLR = st.number_input(f"{feature_name_mapping['NLR']}:", min_value=1.00, max_val
 ASPECTS = st.number_input(f"{feature_name_mapping['ASPECTS']}:", min_value=5, max_value=10, value=8)
 HTN = st.selectbox(f"{feature_name_mapping['Hypertension']} (0=NO, 1=Yes):", options=[0, 1], format_func=lambda x: 'NO (0)' if x == 0 else 'Yes (1)')
 GLU = st.number_input(f"{feature_name_mapping['Serum glucose']}:", min_value=2.2, max_value=32.0, value=8.0)
-Symptomatic_HT = st.selectbox(f"{feature_name_mapping['Hemorrhagic transformation_1']} (0=NO, 1=Yes):", options=[0, 1], format_func=lambda x: 'NO (0)' if x == 0 else 'Yes (1)')
+Symptomatic_HT = st.selectbox(f"{feature_name_mapping['Hemorrhage transformation_1']} (0=NO, 1=Yes):", options=[0, 1], format_func=lambda x: 'NO (0)' if x == 0 else 'Yes (1)')
 NIHSS = st.number_input(f"{feature_name_mapping['Initial NIHSS']}:", min_value=3, max_value=42, value=17)
 NE = st.number_input(f"{feature_name_mapping['Neutrophils']}:", min_value=1.50, max_value=30.00, value=8.00)
 CRP = st.number_input(f"{feature_name_mapping['CRP']}:", min_value=0.10, max_value=200.00, value=12.50)
@@ -57,7 +57,7 @@ feature_values = [PI, NLR, ASPECTS, HTN, GLU, Symptomatic_HT, NIHSS, NE, CRP, DB
 # Corrected feature names for the model
 model_features = [
     'Pulmonary infection', 'NLR', 'ASPECTS', 'Hypertension', 'Serum glucose',
-    'Hemorrhagic transformation_1', 'Initial NIHSS', 'Neutrophils', 'CRP',
+    'Hemorrhage transformation_1', 'Initial NIHSS', 'Neutrophils', 'CRP',
     'Baseline DBP', 'MLS', 'Age'
 ]
 
