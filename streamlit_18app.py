@@ -78,9 +78,11 @@ if st.button("Predict"):
         f"According to feature values, predicted possibility of FR is: {100 - probability}%"
     st.write(result)
 # SHAP Force Plot generation
+# SHAP Force Plot generation
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(features)
-# SHAP Force Plot generation
+
+# Generate SHAP force plot
 plt.figure(figsize=(20, 10))
 shap.force_plot(
     base_value=explainer.expected_value,
