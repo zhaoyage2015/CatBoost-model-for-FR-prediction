@@ -6,7 +6,7 @@ import shap
 import matplotlib.pyplot as plt
 
 # 加载模型
-model = joblib.load('CatBoost_model_11.pkl')
+model = joblib.load('CatBoost_model_02-27.pkl')
 st.markdown("<h6 style='text-align: center; color: black;'>FR Prediction</h6>", unsafe_allow_html=True)
 
 st.markdown("""
