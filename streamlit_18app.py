@@ -98,11 +98,11 @@ texts = [t for t in ax.texts]  # Extract text elements
 # Move feature labels horizontally to avoid overlap
 for text in texts:
     current_pos = text.get_position()
-    text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Shift position horizontally
+    text.set_position((current_pos[0] - 0.3, current_pos[1]))  # Shift position horizontally
 
 # Reduce font size for labels to avoid overlap
 for text in texts:
-    text.set_fontsize(10)  # Decrease font size
+    text.set_fontsize(8)  # Decrease font size
 
 # Save high-resolution image
 plt.savefig("shap_force_plot_final.png", bbox_inches='tight', dpi=600)
