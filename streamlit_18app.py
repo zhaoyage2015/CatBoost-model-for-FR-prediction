@@ -98,7 +98,7 @@ texts = [t for t in ax.texts]  # Extract text elements
 # Move feature labels horizontally to avoid overlap
 for text in texts:
     current_pos = text.get_position()
-    text.set_position((current_pos[0] - 0.3, current_pos[1]))  # Shift position horizontally
+    text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Shift position horizontally
 
 # Reduce font size for labels to avoid overlap
 for text in texts:
