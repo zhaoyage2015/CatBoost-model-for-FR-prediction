@@ -48,7 +48,7 @@ HTN = st.selectbox(f"{feature_name_mapping['Hypertension']} (0=NO, 1=Yes):", opt
 GLU = st.number_input(f"{feature_name_mapping['Serum glucose']}:", min_value=2.2, max_value=32.0, value=8.0)
 Symptomatic_HT = st.selectbox(f"{feature_name_mapping['Hemorrhagic transformation_1']} (0=NO, 1=Yes):",
                               options=[0, 1], format_func=lambda x: 'NO (0)' if x == 0 else 'Yes (1)')
-NIHSS = st.number_input(f"{feature_name_mapping['Initial NIHSS']}:", min_value=3, max_value=42, value=16)
+NIHSS = st.number_input(f"{feature_name_mapping['Initial NIHSS']}:", min_value=3, max_value=42, value=17)
 MLS = st.number_input(f"{feature_name_mapping['MLS']}:", min_value=0.00, max_value=30.00, value=2.88)
 DBP = st.number_input(f"{feature_name_mapping['Baseline DBP']}:", min_value=40, max_value=160, value=85)
 NE = st.number_input(f"{feature_name_mapping['Neutrophils']}:", min_value=1.50, max_value=30.00, value=8.00)
@@ -61,7 +61,7 @@ feature_values = [NLR, PI, ASPECTS, GLU, HTN, Symptomatic_HT, NIHSS, DBP, NE, Ag
 model_features = [
     'NLR', 'Pulmonary infection', 'ASPECTS', 'Serum glucose', 'Hypertension',
     'Hemorrhagic transformation_1', 'Initial NIHSS', 'Baseline DBP',
-    'Neutrophils', 'Age', 'MLS', 'AGR'
+    'Neutrophils', 'Age', 'MLS', 'CRP'
 ]
 features = pd.DataFrame([feature_values], columns=model_features)
 
