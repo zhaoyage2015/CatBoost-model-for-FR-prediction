@@ -35,7 +35,7 @@ feature_name_mapping = {
     'Neutrophils': 'Neutrophils',
     'Age': 'Age',
     'MLS': 'MLS',
-    'AGR': 'AGR'
+    'CRP': 'CRP'
 }
 
 # 用户输入控件
