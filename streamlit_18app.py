@@ -105,7 +105,7 @@ if st.button("Predict"):
                 
                 # 3. Generate SHAP Force Plot
                 force_plot = shap.force_plot(
-                    base_value=base_value,
+                    base_value=explainer.expected_value[1],  # Make sure to use expected_value[1] for class 1
                     shap_values=shap_values_class_1,
                     features=features.iloc[0, :],
                     feature_names=REQUIRED_FEATURES,
