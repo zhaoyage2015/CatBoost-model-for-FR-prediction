@@ -4,11 +4,15 @@ import numpy as np
 import pandas as pd
 import shap
 import matplotlib.pyplot as plt
+import os
 
 # Load model
 model = joblib.load('CatBoost_model_02-27.pkl')
+
+# Title
 st.markdown("<h6 style='text-align: center; color: black;'>FR Prediction</h6>", unsafe_allow_html=True)
 
+# Custom CSS styling
 st.markdown("""
     <style>
     div[data-testid="stVerticalBlock"] {
@@ -66,42 +70,62 @@ features = pd.DataFrame([feature_values], columns=model_features)
 
 # Prediction button
 if st.button("Predict"):
-    predicted_class = model.predict(features)[0]
-    predicted_proba = model.predict_proba(features)[0]
-    probability = round(predicted_proba[predicted_class] * 100, 2)
+    try:
+        predicted_class = model.predict(features)[0]
+        predicted_proba = model.predict_proba(features)[0]
+        probability = round(predicted_proba[predicted_class] * 100, 2)
 
-    st.write(f"**Predicted Class:** {predicted_class}")
-    st.write(f"**Prediction Probabilities:** {[round(p * 100, 2) for p in predicted_proba]}")
+        st.write(f"**Predicted Class:** {predicted_class}")
+        st.write(f"**Prediction Probabilities:** {[round(p * 100, 2) for p in predicted_proba]}")
 
-    result = f"According to feature values, predicted possibility of FR is: {probability}%" \
-        if predicted_class == 1 else \
-        f"According to feature values, predicted possibility of FR is: {100 - probability}%"
-    st.write(result)
+        result = f"According to feature values, predicted possibility of FR is: {probability}%" \
+            if predicted_class == 1 else \
+            f"According to feature values, predicted possibility of FR is: {100 - probability}%"
+        st.write(result)
+
+    except Exception as e:
+        st.error(f"Error during prediction: {e}")
+
 # SHAP Force Plot generation
-explainer = shap.TreeExplainer(model)
-shap_values = explainer.shap_values(features)
+try:
+    explainer = shap.TreeExplainer(model)
+    shap_values = explainer.shap_values(features)
 
-# Generate SHAP force plot
-plt.figure(figsize=(24, 12))
-shap.force_plot(
-    base_value=explainer.expected_value,
-    shap_values=shap_values[0],
-    features=features.iloc[0, :],  # Ensure correct mapping of features
-    feature_names=model_features,
-    matplotlib=True,
-    show=False
-)
+    # Ensure shap_values is correctly indexed (especially for multi-class)
+    shap_values_class_0 = shap_values[0]  # For class 0
+    shap_values_class_1 = shap_values[1]  # For class 1, if it's a binary classification model
 
-# Adjust label positions (shift and reduce font size)
-ax = plt.gca()
-texts = [t for t in ax.texts]  # Extract text elements
-# Move feature labels horizontally to avoid overlap
-for text in texts:
-    current_pos = text.get_position()
-    text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Shift position horizontally
-# Reduce font size for labels to avoid overlap
-for text in texts:
-    text.set_fontsize(9)  # Decrease font size
-# Save high-resolution image
-plt.savefig("shap_force_plot_final.png", bbox_inches='tight', dpi=1500)
-st.image("shap_force_plot_final.png", caption="SHAP Force Plot (Corrected)")
+    # Create directory to save images if it doesn't exist
+    if not os.path.exists("output_images"):
+        os.makedirs("output_images")
+
+    # Generate SHAP force plot
+    plt.figure(figsize=(24, 12))
+    shap.force_plot(
+        base_value=explainer.expected_value,
+        shap_values=shap_values_class_0,  # For class 0
+        features=features.iloc[0, :],  # Ensure correct mapping of features
+        feature_names=model_features,
+        matplotlib=True,
+        show=False
+    )
+
+    # Adjust label positions (shift and reduce font size)
+    ax = plt.gca()
+    texts = [t for t in ax.texts]  # Extract text elements
+
+    # Move feature labels horizontally to avoid overlap
+    for text in texts:
+        current_pos = text.get_position()
+        text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Shift position horizontally
+
+    # Reduce font size for labels to avoid overlap
+    for text in texts:
+        text.set_fontsize(9)  # Decrease font size
+
+    # Save high-resolution image
+    plt.savefig("output_images/shap_force_plot_final.png", bbox_inches='tight', dpi=1500)
+    st.image("output_images/shap_force_plot_final.png", caption="SHAP Force Plot (Corrected)")
+
+except Exception as e:
+    st.error(f"Error generating SHAP force plot: {e}")
