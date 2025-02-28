@@ -99,13 +99,24 @@ if st.button("Predict"):
                     'savefig.facecolor': 'white'  # White background for the plot
                 })
 
-                # 2. Create high-resolution canvas
+                # 2. Create SHAP explainer
+                explainer = shap.TreeExplainer(model)
+                shap_values = explainer.shap_values(features)
+                
+                # 3. Handle scalar output (if shap_values is scalar, use it directly)
+                if isinstance(shap_values, list):
+                    shap_values_class_1 = shap_values[1]  # SHAP values for class 1 (if binary classification)
+                    base_value = explainer.expected_value[1]  # Base value for class 1
+                else:
+                    shap_values_class_1 = shap_values  # For single class output (regression or single-class classification)
+                    base_value = explainer.expected_value  # Use the scalar base value
+                
+                # 4. Generate SHAP Force Plot
                 fig = plt.figure(figsize=(16, 8), dpi=300)  # Keeping dpi=300 for good quality
                 ax = fig.add_subplot(111)
                 
-                # 3. Generate SHAP Force Plot
                 force_plot = shap.force_plot(
-                    base_value=explainer.expected_value[1],  # Make sure to use expected_value[1] for class 1
+                    base_value=base_value,
                     shap_values=shap_values_class_1,
                     features=features.iloc[0, :],
                     feature_names=REQUIRED_FEATURES,
@@ -115,12 +126,12 @@ if st.button("Predict"):
                     contribution_threshold=0.05  # Filter very small contributions
                 )
 
-                # 4. Enhance rendering parameters
+                # 5. Enhance rendering parameters
                 plt.tight_layout(pad=3.0)
                 ax.spines['top'].set_visible(False)
                 ax.spines['right'].set_visible(False)
                 
-                # 5. Optimize saving parameters
+                # 6. Save high-quality plot to in-memory buffer
                 buf = BytesIO()
                 plt.savefig(buf, 
                            format='png',
