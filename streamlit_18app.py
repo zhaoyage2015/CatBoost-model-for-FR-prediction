@@ -103,7 +103,7 @@ if st.button("Predict"):
                     base_value = explainer.expected_value  # Use the scalar base value
                 
                 # Generate SHAP Force Plot
-                plt.figure(figsize=(12, 6))
+                plt.figure(figsize=(20, 10))
                 shap.force_plot(
                     base_value=base_value,  # Use the base value for class 1 (for binary classification)
                     shap_values=shap_values_class_1,  # Use SHAP values for class 1
@@ -126,14 +126,14 @@ if st.button("Predict"):
                 for text in texts:
                     text.set_fontsize(9)  # Decrease font size
 
-                # Save to in-memory
+                # Save to in-memory with high resolution
                 plt.tight_layout()
-                plt.savefig(buf, format="png", dpi=1200, bbox_inches="tight")
+                plt.savefig(buf, format="png", dpi=3000, bbox_inches="tight")  # Set high dpi (3000 for high resolution)
                 plt.close()
 
                 # Display image
                 buf.seek(0)
-                st.image(buf, caption="SHAP Force Plot")
+                st.image(buf, caption="High-Resolution SHAP Force Plot")
                 
             except Exception as e:
                 st.error(f"SHAP explanation generation failed: {str(e)}")
