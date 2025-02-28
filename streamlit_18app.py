@@ -81,7 +81,7 @@ if st.button("Predict"):
         st.markdown(f"""
         ### Prediction Results
         - **FR Probability**: {prob_fr}%
-        - **Effective Reperfusion Probability**: {round(predicted[0]*100, 2)}%
+        - **Successful Reperfusion Probability**: {round(predicted[0]*100, 2)}%
         """)
         
         # SHAP explanation
@@ -94,16 +94,18 @@ if st.button("Predict"):
                 explainer = shap.TreeExplainer(model)
                 shap_values = explainer.shap_values(features)
                 
-                # Check if shap_values is a list (for binary classification) and index accordingly
+                # Handle scalar output (if shap_values is scalar, use it directly)
                 if isinstance(shap_values, list):
                     shap_values_class_1 = shap_values[1]  # SHAP values for class 1 (if binary classification)
+                    base_value = explainer.expected_value[1]  # Base value for class 1
                 else:
                     shap_values_class_1 = shap_values  # For single class output (regression or single-class classification)
+                    base_value = explainer.expected_value  # Use the scalar base value
                 
                 # Generate SHAP Force Plot
                 plt.figure(figsize=(12, 6))
                 shap.force_plot(
-                    base_value=explainer.expected_value[1],  # Use the base value for class 1 (for binary classification)
+                    base_value=base_value,  # Use the base value for class 1 (for binary classification) or scalar base value
                     shap_values=shap_values_class_1,  # Use SHAP values for class 1
                     features=features.iloc[0, :],  # Ensure correct mapping of features
                     feature_names=REQUIRED_FEATURES,
@@ -113,7 +115,7 @@ if st.button("Predict"):
                 plt.tight_layout()
                 
                 # Save to in-memory
-                plt.savefig(buf, format="png", dpi=600, bbox_inches="tight")
+                plt.savefig(buf, format="png", dpi=150, bbox_inches="tight")
                 plt.close()
                 
                 # Display image
@@ -127,4 +129,3 @@ if st.button("Predict"):
     except Exception as e:
         st.error(f"Prediction failed: {str(e)}")
         logger.exception("Prediction error")
-
