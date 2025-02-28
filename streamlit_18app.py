@@ -143,11 +143,8 @@ if st.button("Predict"):
                 plt.close()
 
                 # Display image
-                # Display image
-
-buf.seek(0)
-st.image(buf, caption="High-Resolution SHAP Force Plot", use_container_width=True)
-
+                buf.seek(0)
+                st.image(buf, caption="High-Resolution SHAP Force Plot", use_container_width=True)
                 
             except Exception as e:
                 st.error(f"SHAP explanation generation failed: {str(e)}")
