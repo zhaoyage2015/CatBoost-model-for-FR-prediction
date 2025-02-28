@@ -103,7 +103,7 @@ if st.button("Predict"):
                     base_value = explainer.expected_value  # Use the scalar base value
                 
                 # Generate SHAP Force Plot
-                plt.figure(figsize=(20, 10))
+                plt.figure(figsize=(24, 14))  # Larger figure size for better clarity
                 shap.force_plot(
                     base_value=base_value,  # Use the base value for class 1 (for binary classification)
                     shap_values=shap_values_class_1,  # Use SHAP values for class 1
@@ -124,11 +124,11 @@ if st.button("Predict"):
 
                 # Reduce font size for labels to avoid overlap
                 for text in texts:
-                    text.set_fontsize(9)  # Decrease font size
+                    text.set_fontsize(10)  # Slightly larger font size for better readability
 
                 # Save to in-memory with high resolution
                 plt.tight_layout()
-                plt.savefig(buf, format="png", dpi=1200, bbox_inches="tight")  # Set high dpi (3000 for high resolution)
+                plt.savefig(buf, format="png", dpi=1200, bbox_inches="tight")  # Set dpi to 1200 for good resolution
                 plt.close()
 
                 # Display image
