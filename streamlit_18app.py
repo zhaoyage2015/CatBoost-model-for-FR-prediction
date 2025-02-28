@@ -81,7 +81,7 @@ if st.button("Predict"):
         st.markdown(f"""
         ### Prediction Results
         - **FR Probability**: {prob_fr}%
-        - **Successful Reperfusion Probability**: {round(predicted[0]*100, 2)}%
+        - **Effective Reperfusion Probability**: {round(predicted[0]*100, 2)}%
         """)
         
         # SHAP explanation
@@ -103,35 +103,42 @@ if st.button("Predict"):
                     base_value = explainer.expected_value  # Use the scalar base value
                 
                 # Generate SHAP Force Plot
-plt.figure(figsize=(12, 6))
-shap.force_plot(
-    base_value=base_value,  # Use the base value for class 1 (for binary classification)
-    shap_values=shap_values_class_1,  # Use SHAP values for class 1
-    features=features.iloc[0, :],  # Ensure correct mapping of features
-    feature_names=REQUIRED_FEATURES,
-    matplotlib=True,
-    show=False
-)
+                plt.figure(figsize=(12, 6))
+                shap.force_plot(
+                    base_value=base_value,  # Use the base value for class 1 (for binary classification)
+                    shap_values=shap_values_class_1,  # Use SHAP values for class 1
+                    features=features.iloc[0, :],  # Ensure correct mapping of features
+                    feature_names=REQUIRED_FEATURES,
+                    matplotlib=True,
+                    show=False
+                )
 
-# Adjust label positions (shift and reduce font size)
-ax = plt.gca()  # Get current axis
-texts = [t for t in ax.texts]  # Extract text elements
+                # Adjust label positions (shift and reduce font size)
+                ax = plt.gca()  # Get current axis
+                texts = [t for t in ax.texts]  # Extract text elements
 
-# Move feature labels horizontally to avoid overlap
-for text in texts:
-    current_pos = text.get_position()
-    text.set_position((current_pos[0] - 0.5, current_pos[1]))  # Shift position horizontally to the left
+                # Move feature labels horizontally to avoid overlap
+                for text in texts:
+                    current_pos = text.get_position()
+                    text.set_position((current_pos[0] - 0.5, current_pos[1]))  # Shift position horizontally to the left
 
-# Reduce font size for labels to avoid overlap
-for text in texts:
-    text.set_fontsize(9)  # Decrease font size
+                # Reduce font size for labels to avoid overlap
+                for text in texts:
+                    text.set_fontsize(9)  # Decrease font size
 
-# Save to in-memory
-buf = BytesIO()
-plt.tight_layout()
-plt.savefig(buf, format="png", dpi=1200, bbox_inches="tight")
-plt.close()
+                # Save to in-memory
+                plt.tight_layout()
+                plt.savefig(buf, format="png", dpi=1200, bbox_inches="tight")
+                plt.close()
 
-# Display image
-buf.seek(0)
-st.image(buf, caption="SHAP Force Plot")
+                # Display image
+                buf.seek(0)
+                st.image(buf, caption="SHAP Force Plot")
+                
+            except Exception as e:
+                st.error(f"SHAP explanation generation failed: {str(e)}")
+                logger.exception("SHAP error")
+                
+    except Exception as e:
+        st.error(f"Prediction failed: {str(e)}")
+        logger.exception("Prediction error")
