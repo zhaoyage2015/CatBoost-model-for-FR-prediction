@@ -90,13 +90,13 @@ if st.button("Predict"):
                 # Clear previous figure if any
                 plt.clf()  # Clear previous figure
                 
-                # 1. Adjusting plot settings for better clarity
+                # 1. Adjusting plot settings for better clarity and sharpness
                 plt.rcParams.update({
-                    'font.family': 'Arial',  # Use a standard font for SCI papers
-                    'font.size': 12,         # Increase font size
-                    'lines.linewidth': 1.5,  # Increase line width
-                    'axes.titlepad': 20,     # Increase title padding
-                    'savefig.facecolor': 'white'  # White background for the plot
+                    'font.family': 'Helvetica',  # Use a clean font for publication (Helvetica is widely used)
+                    'font.size': 14,             # Increase font size for better readability
+                    'lines.linewidth': 2,        # Increase line width for clearer lines
+                    'axes.titlepad': 25,         # Increase title padding to avoid crowding
+                    'savefig.facecolor': 'white' # White background for the plot to avoid distractions
                 })
 
                 # 2. Create SHAP explainer
@@ -111,8 +111,8 @@ if st.button("Predict"):
                     shap_values_class_1 = shap_values  # For single class output (regression or single-class classification)
                     base_value = explainer.expected_value  # Use the scalar base value
                 
-                # 4. Generate SHAP Force Plot
-                fig = plt.figure(figsize=(16, 8), dpi=300)  # Keeping dpi=300 for good quality
+                # 4. Generate SHAP Force Plot with higher resolution
+                fig = plt.figure(figsize=(18, 10), dpi=600)  # Higher DPI for better sharpness
                 ax = fig.add_subplot(111)
                 
                 force_plot = shap.force_plot(
@@ -122,24 +122,24 @@ if st.button("Predict"):
                     feature_names=REQUIRED_FEATURES,
                     matplotlib=True,
                     show=False,
-                    text_rotation=15,
+                    text_rotation=45,  # Rotate text more for better readability
                     contribution_threshold=0.05  # Filter very small contributions
                 )
 
-                # 5. Enhance rendering parameters
-                plt.tight_layout(pad=3.0)
-                ax.spines['top'].set_visible(False)
-                ax.spines['right'].set_visible(False)
-                
+                # 5. Enhance rendering parameters for better readability
+                plt.tight_layout(pad=5.0)  # Add more padding around the plot
+                ax.spines['top'].set_visible(False)  # Remove top border for cleaner look
+                ax.spines['right'].set_visible(False)  # Remove right border
+
                 # 6. Save high-quality plot to in-memory buffer
                 buf = BytesIO()
                 plt.savefig(buf, 
                            format='png',
-                           dpi=300,
+                           dpi=600,  # Increased DPI for sharper image
                            bbox_inches='tight',
                            pad_inches=0.5,
                            transparent=False,
-                           facecolor='white')  # Removed 'optimize' argument
+                           facecolor='white')  # Set a white background
                 plt.close()
 
                 # Display image
