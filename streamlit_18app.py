@@ -81,7 +81,7 @@ if st.button("Predict"):
         st.markdown(f"""
         ### Prediction Results
         - **FR Probability**: {prob_fr}%
-        - **Successful Reperfusion Probability**: {round(predicted[0]*100, 2)}%
+        - **Effective Reperfusion Probability**: {round(predicted[0]*100, 2)}%
         """)
         
         # SHAP explanation
@@ -113,7 +113,7 @@ if st.button("Predict"):
                 plt.tight_layout()
                 
                 # Save to in-memory
-                plt.savefig(buf, format="png", dpi=150, bbox_inches="tight")
+                plt.savefig(buf, format="png", dpi=600, bbox_inches="tight")
                 plt.close()
                 
                 # Display image
