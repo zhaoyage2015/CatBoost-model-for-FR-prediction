@@ -78,7 +78,6 @@ if st.button("Predict"):
         f"According to feature values, predicted possibility of FR is: {100 - probability}%"
     st.write(result)
 # SHAP Force Plot generation
-# SHAP Force Plot generation
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(features)
 
@@ -96,16 +95,13 @@ shap.force_plot(
 # Adjust label positions (shift and reduce font size)
 ax = plt.gca()
 texts = [t for t in ax.texts]  # Extract text elements
-
 # Move feature labels horizontally to avoid overlap
 for text in texts:
     current_pos = text.get_position()
     text.set_position((current_pos[0] - 0.4, current_pos[1]))  # Shift position horizontally
-
 # Reduce font size for labels to avoid overlap
 for text in texts:
     text.set_fontsize(9)  # Decrease font size
-
 # Save high-resolution image
 plt.savefig("shap_force_plot_final.png", bbox_inches='tight', dpi=1500)
 st.image("shap_force_plot_final.png", caption="SHAP Force Plot (Corrected)")
