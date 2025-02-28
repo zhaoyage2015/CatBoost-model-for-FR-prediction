@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import logging
 
-# 配置日志
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -19,17 +19,17 @@ except Exception as e:
     st.error(f"Model loading failed: {str(e)}")
     st.stop()
 
-# 界面布局优化
+# Interface layout optimization
 st.markdown("<h6 style='text-align: center; color: black;'>FR Prediction</h6>", unsafe_allow_html=True)
 
-# 特征顺序验证
+# Feature order validation with "Hemorrhage transformation_1" mapped to "Symptomatic HT"
 REQUIRED_FEATURES = [
     'Pulmonary infection', 'NLR', 'ASPECTS', 'Hypertension', 'Serum glucose',
     'Hemorrhage transformation_1', 'Initial NIHSS', 'Neutrophils', 'CRP',
     'Baseline DBP', 'MLS', 'Age'
 ]
 
-# 用户输入控件（保持严格顺序）
+# User input controls (maintain strict order), display "Symptomatic HT" for Hemorrhage transformation_1
 inputs = []
 with st.container():
     cols = st.columns(3)
@@ -58,59 +58,66 @@ with st.container():
         inputs.append(st.number_input("MLS (mm)", min_value=0.0, max_value=30.0, value=2.88, step=0.01))
         inputs.append(st.number_input("Age", min_value=18, max_value=100, value=66))
 
-# 验证特征数量
+# Validate feature count
 if len(inputs) != len(REQUIRED_FEATURES):
-    st.error(f"特征数量不匹配，预期{len(REQUIRED_FEATURES)}个，实际{len(inputs)}个")
+    st.error(f"Feature count mismatch, expected {len(REQUIRED_FEATURES)}, but got {len(inputs)}")
     st.stop()
 
-# 构建特征DataFrame
+# Construct feature DataFrame
 try:
     features = pd.DataFrame([inputs], columns=REQUIRED_FEATURES)
 except Exception as e:
-    st.error(f"特征矩阵构建失败: {str(e)}")
+    st.error(f"Feature matrix construction failed: {str(e)}")
     st.stop()
 
-# 预测逻辑
+# Prediction logic
 if st.button("Predict"):
     try:
-        # 执行预测
+        # Perform prediction
         predicted = model.predict_proba(features)[0]
         prob_fr = round(predicted[1]*100, 2)
         
-        # 显示结果
+        # Display results
         st.markdown(f"""
-        ### 预测结果
-        - **无效再通概率**: {prob_fr}%
-        - **有效再通概率**: {round(predicted[0]*100, 2)}%
+        ### Prediction Results
+        - **FR Probability**: {prob_fr}%
+        - **Successful Reperfusion Probability**: {round(predicted[0]*100, 2)}%
         """)
         
-        # SHAP解释
-        with st.spinner("生成解释..."):
+        # SHAP explanation
+        with st.spinner("Generating explanation..."):
             try:
-                # 创建内存缓冲区避免文件操作
+                # Create in-memory buffer to avoid file operations
                 buf = BytesIO()
                 
-                # 创建SHAP解释器
+                # Create SHAP explainer
                 explainer = shap.TreeExplainer(model)
-                shap_values = explainer(features)
+                shap_values = explainer.shap_values(features)
                 
-                # 生成可视化
+                # Generate SHAP Force Plot
                 plt.figure(figsize=(12, 6))
-                shap.plots.waterfall(shap_values[0], max_display=12, show=False)
+                shap.force_plot(
+                    base_value=explainer.expected_value[1],  # Use the base value for class 1 (for binary classification)
+                    shap_values=shap_values[1],  # Use SHAP values for class 1
+                    features=features.iloc[0, :],  # Ensure correct mapping of features
+                    feature_names=REQUIRED_FEATURES,
+                    matplotlib=True,
+                    show=False
+                )
                 plt.tight_layout()
                 
-                # 保存到内存
+                # Save to in-memory
                 plt.savefig(buf, format="png", dpi=150, bbox_inches="tight")
                 plt.close()
                 
-                # 显示图像
+                # Display image
                 buf.seek(0)
-                st.image(buf, caption="SHAP解释 (Waterfall Plot)")
+                st.image(buf, caption="SHAP Force Plot")
                 
             except Exception as e:
-                st.error(f"SHAP解释生成失败: {str(e)}")
+                st.error(f"SHAP explanation generation failed: {str(e)}")
                 logger.exception("SHAP error")
                 
     except Exception as e:
-        st.error(f"预测失败: {str(e)}")
+        st.error(f"Prediction failed: {str(e)}")
         logger.exception("Prediction error")
