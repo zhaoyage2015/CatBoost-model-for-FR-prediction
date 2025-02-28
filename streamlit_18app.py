@@ -103,7 +103,7 @@ if st.button("Predict"):
                     base_value = explainer.expected_value  # Use the scalar base value
                 
                 # Generate SHAP Force Plot
-                plt.figure(figsize=(12, 6))
+                plt.figure(figsize=(20, 10))
                 shap.force_plot(
                     base_value=base_value,  # Use the base value for class 1 (for binary classification) or scalar base value
                     shap_values=shap_values_class_1,  # Use SHAP values for class 1
@@ -115,7 +115,7 @@ if st.button("Predict"):
                 plt.tight_layout()
                 
                 # Save to in-memory
-                plt.savefig(buf, format="png", dpi=150, bbox_inches="tight")
+                plt.savefig(buf, format="png", dpi=1200, bbox_inches="tight")
                 plt.close()
                 
                 # Display image
