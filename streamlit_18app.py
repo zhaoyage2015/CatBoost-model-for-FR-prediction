@@ -128,7 +128,7 @@ if st.button("Predict"):
 
                 # Save to in-memory with high resolution
                 plt.tight_layout()
-                plt.savefig(buf, format="png", dpi=300, bbox_inches="tight")  # Set high dpi (3000 for high resolution)
+                plt.savefig(buf, format="png", dpi=1200, bbox_inches="tight")  # Set high dpi (3000 for high resolution)
                 plt.close()
 
                 # Display image
