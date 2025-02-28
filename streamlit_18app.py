@@ -131,27 +131,13 @@ if st.button("Predict"):
                 ax.spines['top'].set_visible(False)
                 ax.spines['right'].set_visible(False)
                 
-                # 6. Save high-quality plot to in-memory buffer
-                buf = BytesIO()
-                plt.savefig(buf, 
-                           format='png',
-                           dpi=300,
-                           bbox_inches='tight',
-                           pad_inches=0.5,
-                           transparent=False,
-                           facecolor='white',
-                           optimize=True,
-                           metadata={'Creation Software': 'SHAP v'+shap.__version__})
-                plt.close()
-
-                # Display image
-                buf.seek(0)
-                st.image(buf, caption="High-Resolution SHAP Force Plot", use_column_width='auto')
-                
-            except Exception as e:
-                st.error(f"SHAP explanation generation failed: {str(e)}")
-                logger.exception("SHAP error")
-                
-    except Exception as e:
-        st.error(f"Prediction failed: {str(e)}")
-        logger.exception("Prediction error")
+               # 6. Save high-quality plot to in-memory buffer
+buf = BytesIO()
+plt.savefig(buf, 
+           format='png',
+           dpi=300,  # Use a high DPI for quality
+           bbox_inches='tight',  # Ensures the plot is tightly cropped
+           pad_inches=0.5,  # Add some padding
+           transparent=False,  # Do not make the background transparent
+           facecolor='white')  # White background for the figure
+plt.close()
